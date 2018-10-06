@@ -100,7 +100,8 @@ public class MainWinow extends JFrame implements AWTEventListener {
 		//Bin bin = Bin.launch("udpsrc uri=udp://0.0.0.0:5000 ! application/x-rtp,encoding-name=H264,payload=96 ! rtph264depay ! h264parse ! avdec_h264 ! videoconvert", true);
 		
 		Pipeline video_pipe = Pipeline.launch("udpsrc uri=udp://0.0.0.0:5000 ! application/x-rtp,encoding-name=H264,payload=96 ! rtph264depay ! h264parse ! avdec_h264 ! videoconvert ! appsink name=as");
-		Pipeline audio_pipe = Pipeline.launch("udpsrc address=0.0.0.0 port=5001 caps=application/x-rtp ! rtppcmudepay ! mulawdec ! audioconvert ! autoaudiosink");
+		//Pipeline audio_pipe = Pipeline.launch("udpsrc address=0.0.0.0 port=5001 caps=application/x-rtp ! rtppcmudepay ! mulawdec ! audioconvert ! autoaudiosink");
+		Pipeline audio_pipe = Pipeline.launch("udpsrc uri=udp://0.0.0.0:5001 ! vorbisdec ! audioconvert ! autoaudiosink");
         
 		// Die Video-Komponente zum Anzeigen des Videos im Fenster erzeugen.
         SimpleVideoComponent vc = new SimpleVideoComponent((AppSink) video_pipe.getElementByName("as"));
@@ -198,8 +199,8 @@ public class MainWinow extends JFrame implements AWTEventListener {
         	} );
         keep_alive_timer.start();
         
-		//video_pipe.play();
-		//audio_pipe.play();
+		video_pipe.play();
+		audio_pipe.play();
 	}
 	
 	/**
